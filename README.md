@@ -78,6 +78,7 @@ My Blog是由Docker+SpringBoot+Mybatis+thymeleaf等技术实现的Java博客系�
 #ray.wang modify log
 
 2017-10-09 添加启动脚本start.sh,配置文件修改：application-dev/prod.properties;修改footer links 页面和logo
+2018-03-11 添加微信公账号同步功能，依赖微信Java开发工具包[weixin-java-tools](https://github.com/Wechat-Group/weixin-java-tools)
 
 #最简单的部署方式如下
 1.安装JVM
