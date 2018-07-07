@@ -52,6 +52,11 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = {"","/index"})
     public String index(HttpServletRequest request){
+        UserVo userVo = super.user(request);
+        if(userVo.getUsername().equals("jordan")){
+            return "redirect:/admin/jordan";
+        }
+
         LOGGER.info("Enter admin index method");
         List<CommentVo> comments = siteService.recentComments(5);
         List<ContentVo> contents = siteService.recentContents(5);

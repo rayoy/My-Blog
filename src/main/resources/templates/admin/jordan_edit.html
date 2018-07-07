@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='保存页面',active='page'"
+      xmlns="http://www.w3.org/1999/html">
+<header th:replace="admin/header::headerFragment(${title},${active})"></header>
+<link th:href="@{/admin/plugins/toggles/toggles.css}" rel="stylesheet"/>
+<link th:href="@{/admin/plugins/md/css/style.css}" rel="stylesheet"/>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">
+                            <th:block th:if="${null != jordonMap}">
+                                编辑
+                            </th:block>
+                            <th:block th:unless="${null != jordonMap}">
+                                新建
+                            </th:block>
+                        </h4>
+                    </div>
+                    <div class="col-md-12">
+                        <form id="articleForm" role="form" novalidate="novalidate">
+                            <input type="hidden" name="id" th:value="${jordonMap!=null and jordonMap.id!=null}?${jordonMap.id}: ''" id="id"/>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="请输入密钥" name="k" required=""
+                                       aria-required="true"  th:value="${jordonMap!=null and jordonMap.k!=null }?${jordonMap.k}: ''"/>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="请输入文本" name="v" required=""
+                                       aria-required="true" th:text="${jordonMap!=null and jordonMap.v !=null}?${jordonMap.v}: ''">
+                                </textarea>
+                            </div>
+
+
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">保存</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div th:replace="admin/footer :: footer-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/footer :: footer"></div>
+<script th:src="@{/admin/plugins/md/js/jquery.scrollto.js}"></script>
+<script th:src="@{/admin/plugins/md/js/pagedown.js}"></script>
+<script th:src="@{/admin/plugins/md/js/pagedown-extra.js}"></script>
+<script th:src="@{/admin/plugins/md/js/diff.js}"></script>
+<script th:src="@{/admin/plugins/md/js/md.js}"></script>
+
+<script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/localization/messages_zh.min.js}"></script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var tale = new $.tale();
+    // validate the comment form when it is submitted
+    $('#articleForm').validate({
+        submitHandler: function (form) {
+            var params = $("#articleForm").serialize();
+            var url = $('#articleForm #id').val() != '' ? '/admin/jordan/modify' : '/admin/jordan/save';
+
+            tale.post({
+                url:url,
+                data:params,
+                success: function (result) {
+                    if (result && result.success) {
+                        tale.alertOk({
+                            text:'保存成功',
+                            then: function () {
+                                setTimeout(function () {
+                                    window.location.href = '/admin/jordan';
+                                }, 500);
+                            }
+                        });
+                    } else {
+                        tale.alertError(result.msg || '失败');
+                    }
+                }
+            });
+        }
+    });
+
+    var textarea = $('#text'),
+        toolbar = $('<div class="markdown-editor" id="md-button-bar" />').insertBefore(textarea.parent())
+    preview = $('<div id="md-preview" class="md-hidetab" />').insertAfter('.markdown-editor');
+
+    markdown(textarea, toolbar, preview);
+    /*]]>*/
+</script>
+
+</body>
+</html>
