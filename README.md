@@ -85,13 +85,13 @@ My Blog是由Docker+SpringBoot+Mybatis+thymeleaf等技术实现的Java博客系�
 2017-06-30 目录调整:docker组件化<br/>
 2017-07-20 问题修复:docker-compose重启时mysql容器中数据被删除并初始化的问题<br/>
 
-#ray.wang modify log
+# ray.wang modify log
 
-2017-10-09 添加启动脚本start.sh,配置文件修改：application-dev/prod.properties;修改footer links 页面和logo
+2017-10-09 添加启动脚本start.sh,配置文件修改：application-dev/prod.properties;修改footer links 页面和logo<br/>
 2018-03-11 添加微信公账号同步功能，依赖微信Java开发工具包[weixin-java-tools](https://github.com/Wechat-Group/weixin-java-tools)
 
-#最简单的部署方式如下
-1.安装JVM
-2.安装MySQL 导入source schema.sql
-3.安装Nginx 配置端口映射
+# 最简单的部署方式如下
+1.安装JVM<br/>
+2.安装MySQL 导入source schema.sql<br/>
+3.安装Nginx 配置端口映射<br/>
 4.打包jar,运行启动脚本start.sh
