@@ -5,10 +5,9 @@ import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.controller.BaseController;
 import com.my.blog.website.dto.LogActions;
 import com.my.blog.website.dto.Types;
-import com.my.blog.website.exception.TipException;
-import com.my.blog.website.modal.Bo.RestResponseBo;
-import com.my.blog.website.modal.Vo.AttachVo;
-import com.my.blog.website.modal.Vo.UserVo;
+import com.my.blog.website.model.Bo.RestResponseBo;
+import com.my.blog.website.model.Vo.AttachVo;
+import com.my.blog.website.model.Vo.UserVo;
 import com.my.blog.website.service.IAttachService;
 import com.my.blog.website.service.ILogService;
 import com.my.blog.website.utils.Commons;
@@ -16,7 +15,6 @@ import com.my.blog.website.utils.TaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +38,7 @@ public class AttachController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachController.class);
 
-    public static final String CLASSPATH = TaleUtils.getUplodFilePath();
+    public static final String CLASSPATH = TaleUtils.getUploadFilePath();
 
     @Resource
     private IAttachService attachService;

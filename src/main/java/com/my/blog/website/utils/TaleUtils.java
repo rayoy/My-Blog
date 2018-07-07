@@ -34,7 +34,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.controller.admin.AttachController;
 import com.my.blog.website.exception.TipException;
-import com.my.blog.website.modal.Vo.UserVo;
+import com.my.blog.website.model.Vo.UserVo;
 
 /**
  * Tale工具类
@@ -126,7 +126,7 @@ public class TaleUtils {
     public static DataSource getNewDataSource() {
         if (newDataSource == null) synchronized (TaleUtils.class) {
             if (newDataSource == null) {
-                Properties properties = TaleUtils.getPropFromFile("application-jdbc.properties");
+                Properties properties = TaleUtils.getPropFromFile("application-default.properties");
                 if (properties.size() == 0) {
                     return newDataSource;
                 }
@@ -418,7 +418,7 @@ public class TaleUtils {
      *
      * @return
      */
-    public static String getUplodFilePath() {
+    public static String getUploadFilePath() {
         String path = TaleUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         path = path.substring(1, path.length());
         try {

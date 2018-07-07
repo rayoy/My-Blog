@@ -5,12 +5,12 @@ import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.dto.ErrorCode;
 import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.dto.Types;
-import com.my.blog.website.modal.Bo.ArchiveBo;
-import com.my.blog.website.modal.Bo.CommentBo;
-import com.my.blog.website.modal.Bo.RestResponseBo;
-import com.my.blog.website.modal.Vo.CommentVo;
-import com.my.blog.website.modal.Vo.ContentVo;
-import com.my.blog.website.modal.Vo.MetaVo;
+import com.my.blog.website.model.Bo.ArchiveBo;
+import com.my.blog.website.model.Bo.CommentBo;
+import com.my.blog.website.model.Bo.RestResponseBo;
+import com.my.blog.website.model.Vo.CommentVo;
+import com.my.blog.website.model.Vo.ContentVo;
+import com.my.blog.website.model.Vo.MetaVo;
 import com.my.blog.website.service.ICommentService;
 import com.my.blog.website.service.IContentService;
 import com.my.blog.website.service.IMetaService;
@@ -98,7 +98,9 @@ public class IndexController extends BaseController {
         request.setAttribute("article", contents);
         request.setAttribute("is_post", true);
         completeArticle(request, contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        if (!checkHitsFrequency(request, cid)) {
+            updateArticleHit(contents.getCid(), contents.getHits());
+        }
         return this.render("post");
 
 
@@ -120,7 +122,9 @@ public class IndexController extends BaseController {
         request.setAttribute("article", contents);
         request.setAttribute("is_post", true);
         completeArticle(request, contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        if (!checkHitsFrequency(request, cid)) {
+            updateArticleHit(contents.getCid(), contents.getHits());
+        }
         return this.render("post");
 
 
@@ -308,7 +312,9 @@ public class IndexController extends BaseController {
             request.setAttribute("comments", commentsPaginator);
         }
         request.setAttribute("article", contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        if (!checkHitsFrequency(request, String.valueOf(contents.getCid()))) {
+            updateArticleHit(contents.getCid(), contents.getHits());
+        }
         return this.render("page");
     }
 
@@ -341,7 +347,7 @@ public class IndexController extends BaseController {
      * @param chits
      */
     private void updateArticleHit(Integer cid, Integer chits) {
-        Integer hits = cache.hget("article", "hits");
+        Integer hits = cache.hget("article" + cid, "hits");
         if (chits == null) {
             chits = 0;
         }
@@ -351,9 +357,9 @@ public class IndexController extends BaseController {
             temp.setCid(cid);
             temp.setHits(chits + hits);
             contentService.updateContentByCid(temp);
-            cache.hset("article", "hits", 1);
+            cache.hset("article" + cid, "hits", 1);
         } else {
-            cache.hset("article", "hits", hits);
+            cache.hset("article" + cid, "hits", hits);
         }
     }
 
@@ -410,6 +416,23 @@ public class IndexController extends BaseController {
         cookie.setMaxAge(maxAge);
         cookie.setSecure(false);
         response.addCookie(cookie);
+    }
+
+    /**
+     * 检查同一个ip地址是否在2小时内访问同一文章
+     *
+     * @param request
+     * @param cid
+     * @return
+     */
+    private boolean checkHitsFrequency(HttpServletRequest request, String cid) {
+        String val = IPKit.getIpAddrByRequest(request) + ":" + cid;
+        Integer count = cache.hget(Types.HITS_FREQUENCY.getType(), val);
+        if (null != count && count > 0) {
+            return true;
+        }
+        cache.hset(Types.HITS_FREQUENCY.getType(), val, 1, WebConst.HITS_LIMIT_TIME);
+        return false;
     }
 
 }
