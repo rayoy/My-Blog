@@ -1,5 +1,6 @@
 package com.my.blog.website.interceptor;
 
+import com.my.blog.website.constant.UserContext;
 import com.my.blog.website.model.Vo.OptionVo;
 import com.my.blog.website.model.Vo.UserVo;
 import com.my.blog.website.service.IOptionService;
@@ -70,6 +71,7 @@ public class BaseInterceptor implements HandlerInterceptor {
             cache.hset(Types.CSRF_TOKEN.getType(), csrf_token, uri, 30 * 60);
             request.setAttribute("_csrf_token", csrf_token);
         }
+        UserContext.set(user);
         return true;
     }
 

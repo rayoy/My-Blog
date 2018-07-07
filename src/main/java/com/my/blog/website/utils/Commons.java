@@ -2,14 +2,18 @@ package com.my.blog.website.utils;
 
 
 import com.github.pagehelper.PageInfo;
+import com.my.blog.website.constant.UserContext;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.model.Vo.ContentVo;
+import com.my.blog.website.model.Vo.UserVo;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -197,6 +201,10 @@ public final class Commons {
         return "";
     }
 
+    public static String dateFormat(Date date, String pattern){
+        return DateKit.dateFormat(date,pattern);
+    }
+
     /**
      * 显示分类
      *
@@ -213,6 +221,19 @@ public final class Commons {
             return sbuf.toString();
         }
         return show_categories("默认分类");
+    }
+
+    /**
+     * 获取登录用户名。
+     * @return
+     */
+    public static String getLoginUsername() {
+        UserVo userVo = UserContext.get();
+        if (userVo != null) {
+            return userVo.getUsername();
+        } else {
+            return "";
+        }
     }
 
     /**
